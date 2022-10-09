@@ -7,7 +7,7 @@ import (
 )
 
 func rootHandle(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(">> Go to /api/v0/[endpoint_goes_here]")
+	fmt.Fprint(w, ">> Go to /api/v0/[endpoint_goes_here]")
 }
 
 func main() {
