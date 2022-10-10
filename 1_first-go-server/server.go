@@ -8,6 +8,29 @@ import (
 	"net/http"
 )
 
+type AuthReqSubmission struct{
+	User string
+	Pass string
+	Token string
+	Valid bool
+}
+
+func validateAuthRequest(data AuthReqSubmission, w http.ResponseWriter) {
+	fmt.Println(">> Auth Req Validation w/")
+	fmt.Println("- User:", data.User)
+	fmt.Println("- Password:", data.Pass)
+	fmt.Println("- token", data.Token)
+
+	// VALIDATE - Email
+	// VALIDATE - Password
+	// VALIDATE - Token
+
+	data.Valid = true
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(data)
+}
+
 func rootHandle(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, ">> Go to /api/v0/[endpoint_goes_here]")
 }
@@ -45,16 +68,12 @@ func HandleAuthRequest_json(w http.ResponseWriter, r *http.Request) {
 
 	reqBody, _ := ioutil.ReadAll(r.Body)
 
-	type AuthReq struct{
-		User string
-		Pass string
-		Token string
-	}
-	var authReq AuthReq
+	var requestData AuthReqSubmission
 
-	json.Unmarshal(reqBody, &authReq)
+	json.Unmarshal(reqBody, &requestData)
 	
-	fmt.Println(">> TEST INCOMING JSON", authReq)
+	// fmt.Println(">> TEST INCOMING JSON", authReqSubmission)
+	validateAuthRequest(requestData, w)
 }
 
 func main() {
