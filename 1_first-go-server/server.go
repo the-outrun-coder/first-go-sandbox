@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 )
 
 type AuthReqSubmission struct{
@@ -22,10 +23,16 @@ func validateAuthRequest(data AuthReqSubmission, w http.ResponseWriter) {
 	fmt.Println("- token", data.Token)
 
 	// VALIDATE - Email
+	emailVerified := data.User == "c137@onecause.com"
 	// VALIDATE - Password
+	passVerified := data.Pass == "#th@nH@rm#y#r!$100%D0p#"
 	// VALIDATE - Token
+	ctMatcher := time.Now().Format("0304")
+	ctTokenMatches := ctMatcher == data.Token
 
-	data.Valid = true
+	fmt.Println(">> CURRENT TIME TOKEN MATCH:", ctMatcher, data.Token, ctTokenMatches)
+
+	data.Valid = emailVerified && passVerified && ctTokenMatches
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(data)
